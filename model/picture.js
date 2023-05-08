@@ -4,8 +4,8 @@ const pictureSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   imageUrl: { type: String, required: true },
-  imageDate: { type: Date, required: true },
-  category: { type: String, enum: categories },
+  //   imageDate: { type: Date, required: true },
+  //category: { type: String, enum: categories },
   //   photographer: {
   //     name: {
   //       type: String,
@@ -19,7 +19,7 @@ const pictureSchema = new mongoose.Schema({
   //     },
   //   },
 });
-
+//device used
 const categories = [
   "Landscape",
   "Nature",
