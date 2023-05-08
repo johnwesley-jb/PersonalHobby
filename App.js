@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extented: false }));
 
 app.listen(process.env.EXPRESS_PORT, () => {
-  console.log("server running");
+  console.log(process.env.SERVER_RUNNING_MSG, process.env.EXPRESS_PORT);
 });
 
 app.use("/", router);

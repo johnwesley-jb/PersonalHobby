@@ -15,18 +15,18 @@ const pictureSchema = mongoose.Schema({
     },
   ],
 });
-const categories = [
-  "Landscape",
-  "Nature",
-  "Portrait",
-  "Street",
-  "Architectural",
-  "Sports",
-  "Travel",
-  "Food",
-  "Wedding",
-  "Product",
-];
+// const categories = [
+//   "Landscape",
+//   "Nature",
+//   "Portrait",
+//   "Street",
+//   "Architectural",
+//   "Sports",
+//   "Travel",
+//   "Food",
+//   "Wedding",
+//   "Product",
+// ];
 
 const Picture = mongoose.model("Picture", pictureSchema);
 

@@ -3,7 +3,7 @@ const callbackify = require("util").callbackify;
 
 exports.getAllPictures = (req, res) => {
   let offset = 0;
-  let count = 5;
+  let count = 10;
   if (req.query && req.query.offset) {
     offset = parseInt(req.query.offset, 0);
   }
@@ -64,24 +64,51 @@ exports.deletePicture = (req, res) => {
   try {
     const deletedPic = Picture.findByIdAndDelete(req.params.id);
     if (!deletedPic) {
-      return res.status(404).json({ error: "Picture not found" });
+      return res.status(404).json({ error: process.env.PICTURE_NOT_FOUND });
     }
-    res.status(200).json({ message: "Picture deleted successfully" });
+    res.status(200).json({ message: DELETE_SUCCESSFUL_MSG });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
+// exports.updatePicture = async (req, res) => {
+//   try {
+//     const updatedPicture = await Picture.findByIdAndUpdate(
+//       req.params.id,
+//       req.body,
+//       {
+//         new: true,
+//       }
+//     );
+//     if (!updatedPicture) {
+//       return res.status(404).json({ error: process.env.PICTURE_NOT_FOUND });
+//     }
+//     res.status(200).json(updatedPicture);
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// };
+
 exports.updatePicture = (req, res) => {
-  try {
-    const updatedPicture = Picture.findByIdAndUpdate(req.params.id, req.body, {
+  const updatedPicture = callbackify(Picture.findByIdAndUpdate.bind(Picture));
+
+  updatedPicture(
+    req.params.id,
+    req.body,
+    {
       new: true,
-    });
-    if (!updatedPicture) {
-      return res.status(404).json({ error: "Picture not found" });
+    },
+    (err, data) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        if (data === null) {
+          res.status(404).send("Picture not found");
+        } else {
+          res.json(data);
+        }
+      }
     }
-    res.status(200).json(updatedPicture);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
+  );
 };
