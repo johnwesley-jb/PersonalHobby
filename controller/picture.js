@@ -2,6 +2,18 @@ const Picture = require("../model/picture");
 const callbackify = require("util").callbackify;
 const ObjectId = require("mongodb").ObjectId;
 
+const serverError = (res, error) => {
+  res.status(500).json({ error: "Internal server error" });
+};
+
+const error404 = (res, error) => {
+  res.status(404).json({ error: "Not found" });
+};
+
+const successMsg = (res, data) => {
+  res.status(200).json(data);
+};
+
 exports.getAllPictures = (req, res) => {
   let offset = 0;
   let count = 10;
@@ -55,7 +67,6 @@ exports.deletePicture = (req, res) => {
 
 exports.updatePicture = (req, res) => {
   const updatedPicture = callbackify(Picture.findByIdAndUpdate.bind(Picture));
-
   updatedPicture(
     req.params.id,
     req.body,
@@ -78,7 +89,6 @@ exports.updatePicture = (req, res) => {
 
 const _updatePublisher = (body) => {
   const verifiedAttributes = {};
-
   for (const attribute in body) {
     if (body[attribute] !== null) {
       verifiedAttributes[attribute] = body[attribute];
@@ -91,9 +101,7 @@ const _updatePublisher = (body) => {
 exports.partialUpdatePicture = (req, res) => {
   const updateData = _updatePublisher(req.body);
   const id = req.params.id;
-
-  console.log(updateData);
-
+  //console.log(updateData);
   Picture.updateOne(
     { _id: new ObjectId(id) },
     { $set: updateData },
@@ -101,7 +109,7 @@ exports.partialUpdatePicture = (req, res) => {
       if (err) {
         return res.status(500).send("Error updating Attributes");
       }
-      res.status(200).send("Pictures updated successfully");
+      res.status(200).json(result);
     }
   );
 };
