@@ -3,12 +3,16 @@ const router = express.Router();
 
 const pictureController = require("../../controller/picture");
 
-router.get("/", pictureController.getAllPictures);
-router.post("/", pictureController.savePicture);
-router.get("/:id", pictureController.getPictureById);
-router.delete("/:id", pictureController.deletePicture);
-router.put("/:id", pictureController.updatePicture);
+router
+  .route("/")
+  .get(pictureController.getAllPictures)
+  .post(pictureController.savePicture);
 
-router.patch("/:id", pictureController.partialUpdatePicture);
+router
+  .route("/:id")
+  .get(pictureController.getPictureById)
+  .delete(pictureController.deletePicture)
+  .put(pictureController.updatePicture)
+  .patch(pictureController.partialUpdatePicture);
 
 module.exports = router;
